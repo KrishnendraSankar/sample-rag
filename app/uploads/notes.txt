@@ -1,0 +1,124 @@
+# Global Information Security & Compliance Policy
+
+**Document ID:** GTCC-SEC-COMP-2026-V2
+
+**Effective Date:** July 14, 2026
+
+**Applicability:** All Global IT Consulting Entities, Data Centers, and Remote Operating Hubs
+
+---
+
+> **Purpose Statement:** This policy establishes the global technical controls, administrative frameworks, and governance protocols required to safeguard the intellectual capital of our IT Consulting Multinational Corporation (MNC) and its clients. Operating under a strict Zero-Trust philosophy, this framework ensures unyielding compliance with international data privacy regulations, national defense software standards, and global security certifications.
+
+---
+
+## 1. Regulatory Alignment & Compliance Architecture
+
+As a global technology provider, our infrastructure and business processes must comply with international frameworks. This policy establishes a baseline that incorporates regulations across our primary operating jurisdictions:
+
+* **Global Privacy Standards:** Adherence to the European Union General Data Protection Regulation (GDPR), the California Consumer Privacy Act (CCPA), and regional Data Protection Acts is mandatory for all personnel processing Personally Identifiable Information (PII).
+* **Corporate Security Frameworks:** All operating systems, development pipelines, and enterprise systems must continuously meet the security standards required to maintain **ISO/IEC 27001:2022** and **SOC 2 Type II** certifications.
+* **Industry-Specific Directives:** Consulting teams engaged in financial services, healthcare, or defense sectors must comply with the Payment Card Industry Data Security Standard (PCI-DSS), Health Insurance Portability and Accountability Act (HIPAA), and National Institute of Standards and Technology (NIST) controls respectively.
+
+---
+
+## 2. Zero-Trust Architecture & Identity Management
+
+Our security posture operates on a fundamental premise: *Never Trust, Always Verify*. No user, device, or system architecture is deemed secure by default, regardless of whether it originates within our physical office perimeter or a remote network.
+
+### 2.1 Identity Verification & Authentication Standards
+
+* **Multi-Factor Authentication (MFA):** Access to all corporate assets, single sign-on (SSO) gateways, enterprise email accounts, and production environments requires mandatory phishing-resistant hardware MFA keys or verified biometric authentication.
+* **Credential Management:** The use of shared administrative credentials is strictly prohibited. Passwords for system service accounts must meet corporate length and complexity mandates, be managed via approved enterprise credential vaults, and rotate automatically every 90 days.
+* **Privileged Access Management (PAM):** Elevated access privileges (e.g., root, global administrator) are granted on a Just-In-Time (JIT) basis. These privileges are limited to the minimum time necessary to resolve a specific incident and require a documented reason linked to a valid ticketing system.
+
+### 2.2 Network Segmentation & Perimeter Controls
+
+* **Virtual Private Networks (VPN):** Remote engineering staff must access internal repositories and staging environments exclusively through encrypted corporate VPN channels that use split-tunnel configurations monitored by security teams.
+* **Environment Isolation:** Production networks hosting client systems must remain logically and physically isolated from corporate administrative networks and software development environments. No cross-environment data synchronization is permitted without direct approval from the Chief Information Security Officer (CISO).
+
+---
+
+## 3. Data Protection, Governance & Privacy Management
+
+Data is our most critical asset. We classify corporate and client information into distinct sensitivity tiers to apply proportional security controls.
+
+### 3.1 Data Classification Framework
+
+* **Public:** Information intentionally cleared for general public distribution, marketing materials, and open recruitment announcements.
+* **Internal:** Standard operational emails, non-proprietary corporate documentation, policy handbooks, and standard business templates.
+* **Confidential:** Project management structures, unreleased software testing logs, billing models, and standard employee records.
+* **Restricted:** High-value asset configurations, client system architecture blueprints, proprietary source code, access credentials, and sensitive PII.
+
+### 3.2 Encryption Standards
+
+* **Data at Rest:** All corporate developer hardware, storage arrays within data centers, and object storage buckets inside cloud architectures must maintain full disk encryption using AES-256 standards.
+* **Data in Transit:** Any transmission of corporate or client data across external networks must use secure cryptographic protocols, including TLS 1.3 or SSHv2. Legacy insecure protocols (e.g., FTP, HTTP, Telnet) are disabled across all systems.
+
+### 3.3 Data Minimization, Lifecycle, & Shredding
+
+* **Collection Restraints:** Personnel may collect and process client data or PII only when strictly required for project execution.
+* **Data Retention:** Data must be purged or anonymized immediately after the termination of a client contract or project lifecycle, in alignment with contractual obligations and statutory records retention laws.
+* **Sanitization and Destruction:** Decoupled storage media, obsolete developer laptops, and decommissioned servers must undergo data sanitization processes adhering to NIST SP 800-88 guidelines before physical destruction or recycling.
+
+---
+
+## 4. Secure Software Development Lifecycle (SSDLC)
+
+As an IT consulting MNC, the integrity of the code we write and deliver to clients is paramount. Security must be integrated into every phase of the development lifecycle.
+
+### 4.1 Vulnerability Scans and Static Analysis
+
+* **Static Application Security Testing (SAST):** Code check-ins to internal version control repositories must trigger automated SAST scanning to detect hardcoded secrets, injection vulnerabilities, and structural code anomalies.
+* **Software Bill of Materials (SBOM):** Teams must maintain a clear, automated SBOM for every application built. This inventory must undergo continuous open-source software license audits and Software Composition Analysis (SCA) to identify vulnerable open-source dependencies.
+
+### 4.2 Code Reviews & Deployment Guardrails
+
+* **Peer Review Mandate:** Production deployments require independent review and approval from at least one senior technical lead or software architect. Pull requests cannot be merged unilaterally by the author.
+* **Container Security:** Microservice applications must use minimal base images and undergo vulnerability scanning before being deployed to corporate or client container platforms.
+
+---
+
+## 5. Vulnerability Management & Incident Response
+
+### 5.1 Vulnerability Discovery and Patch Management
+
+* **Continuous Scanning:** The Global Security Operations Center (GSOC) executes weekly automated vulnerability assessments across all corporate public networks, production nodes, and software endpoints.
+* **Patch Lifecycles:** Discovered software vulnerabilities are prioritized based on their Common Vulnerability Scoring System (CVSS) rating:
+* **Critical (CVSS 9.0–10.0):** Remediation required within 48 hours of detection.
+* **High (CVSS 7.0–8.9):** Remediation required within 14 business days.
+* **Medium/Low (CVSS 0.0–6.9):** Remediation aligned with standard monthly release cadences.
+
+
+
+### 5.2 Security Incident Response Protocol
+
+* **Mandatory Reporting Window:** Any employee, contractor, or embedded resource who detects a potential phishing attempt, unauthorized system access, data anomaly, or lost hardware asset must report the event to the GSOC within 15 minutes of discovery.
+* **Containment Steps:** Upon receiving a confirmed incident report, the GSOC is authorized to isolate affected infrastructure nodes, revoke network credentials, and suspend active sessions without prior managerial approval to prevent lateral movement.
+* **Regulatory Notification:** If an incident involves confirmed exposure of client data or employee PII, the Corporate Legal and Compliance team will notify relevant data protection regulators and affected clients within 72 hours, satisfying GDPR and related global regulatory standards.
+
+---
+
+## 6. Physical & Endpoint Security Controls
+
+### 6.1 Physical Access Protections
+
+* **Corporate Office Perimeter:** All global engineering hubs and corporate data centers require automated biometric authentication or encrypted RFID badge access for entry. Visitors must be formally logged, show photo identification, and be escorted by an employee at all times.
+* **Clean Desk Policy:** Employees working within physical corporate spaces or open customer facilities must lock their terminal screens when stepping away from their workspaces. No sensitive printouts, architectural layouts, or password keys may be left unsecured on desks.
+
+### 6.2 Endpoint Hardware Security
+
+* **Device Configuration Restraints:** Laptops issued by the company run managed operating profiles. Employees are strictly prohibited from disabling corporate anti-malware binaries, bypassing local firewall settings, or installing unvetted third-party software applications.
+* **Removable Storage Block:** The use of unencrypted personal USB storage keys, external hard drives, or consumer-grade media options on corporate endpoints is blocked by default at the operating system level.
+
+---
+
+## 7. Policy Enforcement, Auditing & Disciplinary Framework
+
+### 7.1 Independent Compliance Audits
+
+The Global Internal Audit Committee, in collaboration with accredited third-party cybersecurity firms, conducts unannounced security posture assessments and compliance audits across all regional subsidiaries twice a year. Employees must provide full cooperation, access to tracking logs, and relevant documentation to these audit teams.
+
+### 7.2 Non-Compliance Sanctions
+
+Compliance with this policy is a condition of employment. Violations—including intentional circumvention of system firewalls, unauthorized use of client source code, leaking corporate data, or ignoring mandatory security training tracks—will trigger review by the Global Employee Relations Team. Disciplinary actions follow a progressive scale up to immediate contract termination for cause, severe financial penalties, and full coordination with state and federal law enforcement agencies for criminal prosecution.

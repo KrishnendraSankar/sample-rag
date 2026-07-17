@@ -23,8 +23,8 @@ class MongoService:
 
             mongo_chunks.append({
 
-                "chunk_id": chunk.chunk_id,
-
+                "chunk_id": str(chunk.id),
+                "sequence": chunk.sequence,
                 "text": chunk.text
 
             })
@@ -32,32 +32,22 @@ class MongoService:
         self.collection.insert_one({
 
             "document_id": str(document.id),
-
             "filename": document.filename,
-
             "content": document.content,
-
             "chunks": mongo_chunks
 
         })
         return
     
-    def get_chunk(self, document_id, chunk_id):
+    def get_chunk(self, chunk_id: str):
 
         document = self.collection.find_one({
-
-            "document_id": document_id
-
+            "chunks.chunk_id": chunk_id
+        },
+        {
+            "chunks.$": 1
         })
 
         if not document:
-
             return None
-
-        for chunk in document["chunks"]:
-
-            if chunk["chunk_id"] == chunk_id:
-
-                return chunk["text"]
-
-        return None
+        return document["chunks"][0]

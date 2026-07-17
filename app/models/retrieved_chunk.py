@@ -1,11 +1,9 @@
 from dataclasses import dataclass
 from uuid import UUID
 
-
 @dataclass
-class Chunk:
-
-    id: UUID
-    document_id: UUID
+class RetrievedChunk:
+    chunk_id: UUID
     sequence: int
     text: str
+    score: float

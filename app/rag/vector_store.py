@@ -27,35 +27,30 @@ class VectorStore:
         return
     
     def insert_chunks(self, chunks, vectors ):
-
         points = []
-
         for chunk, vector in zip(chunks, vectors):
-
             points.append(
-
                 PointStruct(
-
-                    id=chunk.chunk_id,
-
+                    id=str(chunk.id),
                     vector=vector,
-
                     payload={
-
-                        "document_id": chunk.document_id,
-
-                        "chunk_id": chunk.chunk_id,
-
+                        "document_id": str(chunk.document_id),
+                        "chunk_id": str(chunk.id),
+                        "sequence": chunk.sequence,
                     }
-
                 )
-
             )
-
         self.client.upsert(
-
             collection_name=settings.COLLECTION_NAME,
-
             points=points
-
         )
+    def search(self, query_vector: list[float], limit: int=5):
+        """Search Similar vectors in Qdrant Collection."""
+        result = self.client.query_points(
+            collection_name=settings.COLLECTION_NAME,
+            query=query_vector,
+            limit=limit,
+            with_payload=True,
+            with_vectors=False
+        )
+        return result.points

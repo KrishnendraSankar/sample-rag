@@ -1,3 +1,5 @@
+import uuid
+
 from app.models.chunk import Chunk
 
 class ChunkService:
@@ -7,8 +9,9 @@ class ChunkService:
         for index, chunk in enumerate(chunks, start=1):
             result.append(
                 Chunk(
+                    id = uuid.uuid4(),
                     document_id=document.id,
-                    chunk_id=index,
+                    sequence=index+1,
                     text=chunk
                 )
             )

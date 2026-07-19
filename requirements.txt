@@ -2,10 +2,10 @@ fastapi
 uvicorn
 python-dotenv
 pydantic-settings
+pydantic
 openai
 langchain
 langchain-openai
-qdrant-client
 pymongo
 psycopg
 pypdf
@@ -17,3 +17,4 @@ langchain-text-splitters
 langchain-openai
 openai
 qdrant-client
+langchain-core

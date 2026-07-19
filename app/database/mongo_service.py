@@ -44,10 +44,12 @@ class MongoService:
         document = self.collection.find_one({
             "chunks.chunk_id": chunk_id
         },
+        
         {
-            "chunks.$": 1
+            "chunks.$": 1,
+            "filename": 1
         })
 
         if not document:
             return None
-        return document["chunks"][0]
+        return {"chunks": document["chunks"][0], "filename": document.get("filename", "Unknown")}

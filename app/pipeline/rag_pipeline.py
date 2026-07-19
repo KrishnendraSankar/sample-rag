@@ -13,16 +13,40 @@ class RAGPipeline:
     def ask(
         self,
         question: str,
-    ):
+        top_k: int = 5
+    ) ->dict:
+        
+        # -----------------------------------------
+        # Step 1: Retrieve relevant chunks
+        # -----------------------------------------
+        
         retrieved_chunks = self.retriever.retrieve(
             question=question,
-            top_k=5
+            top_k=top_k
         )
 
-        texts = [chunk.text for chunk in retrieved_chunks]
+        # -----------------------------------------
+        # Step 2: Handle empty retrieval
+        # -----------------------------------------
+        if not retrieved_chunks:
+            return {
+                "question": question,
+                "answer": "I couldn't find that information.",
+                "sources": [],
+            }
+
+        # texts = [chunk.text for chunk in retrieved_chunks]
+
+        # -----------------------------------------
+        # Step 3: Build prompt
+        #
+        # Pass complete chunk objects instead of
+        # only passing their text.
+        # -----------------------------------------
+
         prompt = self.prompt_builder.build(
-            question,
-            texts
+            question=question,
+            chunks=retrieved_chunks,
         )
 
         answer = self.llm.ask(prompt)

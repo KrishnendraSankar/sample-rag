@@ -22,13 +22,17 @@ class RetrievalPipeline:
             if not chunk_id:
                 continue
 
-            mongo_chunk = self.mongo_service.get_chunk(str(chunk_id))
+            mongodata = self.mongo_service.get_chunk(str(chunk_id))
+            mongo_chunk = mongodata.get('chunks') if mongodata else None
+            document_name = mongodata.get('filename') if mongodata else "Unknown"
+            
             if mongo_chunk:
                 retrieved_chunks.append(
                     RetrievedChunk(
                         chunk_id=chunk_id,
                         sequence=payload.get('sequence', 0),
                         text=mongo_chunk['text'],
+                        document_name=document_name if document_name else "Unknown",
                         score=float(getattr(chunk, 'score', 0.0) or 0.0)
                     )
                 )

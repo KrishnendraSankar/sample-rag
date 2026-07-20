@@ -13,7 +13,8 @@ class RAGPipeline:
     def ask(
         self,
         question: str,
-        top_k: int = 5
+        top_k: int = 5,
+        score_threshold: float | None = None,
     ) ->dict:
         
         # -----------------------------------------
@@ -22,7 +23,8 @@ class RAGPipeline:
         
         retrieved_chunks = self.retriever.retrieve(
             question=question,
-            top_k=top_k
+            top_k=top_k,
+            score_threshold=score_threshold
         )
 
         # -----------------------------------------

@@ -48,13 +48,14 @@ class VectorStore:
             collection_name=settings.COLLECTION_NAME,
             points=points
         )
-    def search(self, query_vector: list[float], limit: int=5):
+    def search(self, query_vector: list[float], limit: int=5, score_threshold: float | None = None):
         """Search Similar vectors in Qdrant Collection."""
         result = self.client.query_points(
             collection_name=settings.COLLECTION_NAME,
             query=query_vector,
             limit=limit,
             with_payload=True,
-            with_vectors=False
+            with_vectors=False,
+            score_threshold=score_threshold
         )
         return result.points

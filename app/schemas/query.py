@@ -21,6 +21,13 @@ class QueryRequest(BaseModel):
         description="Number of relevant chunks to retrieve",
     )
 
+    score_threshold: float | None = Field(
+        default=None,
+        ge=0.0,
+        le=1.0,
+        description="Minimum similarity score required for retrieved chunks"
+    )
+
 
 class QueryResponse(BaseModel):
     """

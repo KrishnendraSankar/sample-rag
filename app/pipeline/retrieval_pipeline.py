@@ -8,12 +8,12 @@ class RetrievalPipeline:
         self.mongo_service = MongoService()
         self.embedding_service = EmbeddingService()
         self.vector_store = VectorStore()
-    def retrieve(self, question: str, top_k: int = 5) -> list[RetrievedChunk]:
+    def retrieve(self, question: str, top_k: int = 5, score_threshold: float | None = None,) -> list[RetrievedChunk]:
         # Step 1: Embed the question
         question_vector = self.embedding_service.embed_query(question)
         # print("Question Vector:", question_vector)
         # Step 2: Search for similar chunks in the vector store
-        similar_chunks = self.vector_store.search(question_vector, top_k)
+        similar_chunks = self.vector_store.search(question_vector, top_k, score_threshold=score_threshold)
         # Step 3: Retrieve the full chunk text from MongoDB
         retrieved_chunks = []
         for chunk in similar_chunks:
@@ -21,7 +21,7 @@ class RetrievalPipeline:
             chunk_id = payload.get('chunk_id') or getattr(chunk, 'id', None)
             if not chunk_id:
                 continue
-
+            
             mongodata = self.mongo_service.get_chunk(str(chunk_id))
             mongo_chunk = mongodata.get('chunks') if mongodata else None
             document_name = mongodata.get('filename') if mongodata else "Unknown"

@@ -8,9 +8,13 @@ from app.config.settings import settings
 
 class VectorStore:
     def __init__(self):
-        self.client = QdrantClient(
-            url=settings.QDRANT_URL,
-        )
+        if settings.QDRANT_API_KEY:
+            self.client = QdrantClient(
+                url=settings.QDRANT_URL,
+                api_key=settings.QDRANT_API_KEY,
+            )
+        else:
+            self.client = QdrantClient(url=settings.QDRANT_URL)
     
     def create_collection(self, vector_size: int):
         collections = self.client.get_collections()

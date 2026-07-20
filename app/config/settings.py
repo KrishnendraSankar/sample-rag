@@ -25,6 +25,7 @@ class Settings(BaseSettings):
 
     # Qdrant
     QDRANT_URL: str = ""
+    QDRANT_API_KEY: str = ""
     COLLECTION_NAME: str = "documents"
 
     model_config = SettingsConfigDict(

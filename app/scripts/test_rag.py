@@ -2,10 +2,10 @@
 
 from app.pipeline.rag_pipeline import RAGPipeline
 
-
 pipeline = RAGPipeline()
 
-question = "How many ANNUAL PAID LEAVE are allowed?"
+# question = "How many ANNUAL PAID LEAVE are allowed?"
+question = "When and where the computational assets are shipped ?"
 
 
 result = pipeline.ask(
@@ -44,25 +44,13 @@ for index, source in enumerate(
 
     print(f"Source       : {index}")
 
-    print(
-        f"Score        : "
-        f"{source.score:.4f}"
-    )
+    print(f"Score        : " f"{source.score:.4f}")
 
-    print(
-        f"Document Name: "
-        f"{source.document_name}"
-    )
+    print(f"Document Name: " f"{source.document_name}")
 
-    print(
-        f"Chunk ID     : "
-        f"{source.chunk_id}"
-    )
+    print(f"Chunk ID     : " f"{source.chunk_id}")
 
-    print(
-        f"Sequence     : "
-        f"{source.sequence}"
-    )
+    print(f"Sequence     : " f"{source.sequence}")
 
     print()
 

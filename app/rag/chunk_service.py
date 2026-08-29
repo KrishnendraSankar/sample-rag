@@ -11,7 +11,7 @@ class ChunkService:
                 Chunk(
                     id = uuid.uuid4(),
                     document_id=document.id,
-                    sequence=index+1,
+                    sequence=index,
                     text=chunk
                 )
             )

@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 from datetime import datetime
 from uuid import UUID
+from typing import Optional
 
 
 @dataclass
@@ -10,10 +11,10 @@ class Document:
 
     filename: str
 
-    file_type: str
-
-    file_size: int
-
     content: str
 
-    uploaded_at: datetime
+    file_type: Optional[str] = None
+
+    file_size: Optional[int] = None
+
+    uploaded_at: Optional[datetime] = None

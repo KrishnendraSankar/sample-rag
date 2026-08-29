@@ -22,11 +22,10 @@ class MongoService:
         for chunk in chunks:
 
             mongo_chunks.append({
-
                 "chunk_id": str(chunk.id),
                 "sequence": chunk.sequence,
-                "text": chunk.text
-
+                "text": chunk.text,
+                "metadata": chunk.metadata,
             })
 
         self.collection.insert_one({

@@ -6,6 +6,10 @@ pydantic
 openai
 langchain
 langchain-openai
+langchain-text-splitters
+langchain-core
+langchain-community
+unstructured
 pymongo
 psycopg
 pypdf
@@ -13,8 +17,8 @@ python-docx
 markdown
 sqlalchemy
 alembic
-langchain-text-splitters
-langchain-openai
-openai
 qdrant-client
-langchain-core
+python-docx
+markdown
+markdown-it-py>=3.0.0
+PyYAML>=6.0

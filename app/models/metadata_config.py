@@ -1,0 +1,18 @@
+QDRANT_FILTERABLE_FIELDS = {
+    "file_type",
+    "source",
+    "page_number",
+    "heading_1",
+    "heading_2",
+    "heading_3",
+    "heading_4",
+    "heading_5",
+    "heading_6",
+    "language",
+    "category",
+    "department",
+    "author",
+    "created_date",
+    "tenant_id",
+    "security_level",
+}

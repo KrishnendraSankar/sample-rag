@@ -21,38 +21,21 @@ class IndexingPipeline:
         self.vector_store = VectorStore()
 
         self.mongo = MongoService()
-    
-    def index_document(self, file_path):
+
+    def index_document(self, file_path, tenant_id="hr_dept"):
 
         document = self.ingestion.ingest(file_path)
 
-        chunk_strings = self.chunker.split(
-            document.content
-        )
+        chunk_strings = self.chunker.split(document.content)
 
-        chunks = self.chunk_service.create_chunk(
-            document,
-            chunk_strings
-        )
+        chunks = self.chunk_service.create_chunk(document, chunk_strings)
 
-        vectors = self.embedding.embed_chunks(
+        vectors = self.embedding.embed_chunks([chunk.text for chunk in chunks])
 
-            [chunk.text for chunk in chunks]
+        self.mongo.save_document(document, chunks)
 
-        )
+        self.vector_store.create_collection(len(vectors[0]))
 
-        self.mongo.save_document(
-            document,
-            chunks
-        )
-
-        self.vector_store.create_collection(
-            len(vectors[0])
-        )
-
-        self.vector_store.insert_chunks(
-            chunks,
-            vectors
-        )
+        self.vector_store.insert_chunks(chunks, vectors, tenant_id)
 
         return document

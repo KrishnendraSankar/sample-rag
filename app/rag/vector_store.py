@@ -2,6 +2,10 @@ from qdrant_client import QdrantClient
 from qdrant_client.models import Distance
 from qdrant_client.models import VectorParams
 from qdrant_client.models import PointStruct
+from qdrant_client.models import Filter
+from qdrant_client.models import FieldCondition
+from qdrant_client.models import MatchValue
+from qdrant_client.models import PayloadSchemaType
 
 from app.config.settings import settings
 from app.models.chunk import Chunk
@@ -27,19 +31,21 @@ class VectorStore:
             collection.name for collection in collections.collections
         }
 
-        if settings.COLLECTION_NAME in existing_collections:
-            return
+        if settings.COLLECTION_NAME not in existing_collections:
+            self.client.create_collection(
+                collection_name=settings.COLLECTION_NAME,
+                vectors_config=VectorParams(size=vector_size, distance=Distance.COSINE),
+            )
 
-        self.client.create_collection(
+        # Create payload index for filtering by tenant
+        self.client.create_payload_index(
             collection_name=settings.COLLECTION_NAME,
-            vectors_config=VectorParams(size=vector_size, distance=Distance.COSINE),
+            field_name="tenant",
+            field_schema=PayloadSchemaType.KEYWORD,
         )
         return
 
-    def build_qdrant_payload(
-        self,
-        chunk: Chunk,
-    ) -> dict:
+    def build_qdrant_payload(self, chunk: Chunk, tenant_id: str) -> dict:
         """
         Build payload that will be stored
         in Qdrant.
@@ -54,6 +60,7 @@ class VectorStore:
             "document_id": str(chunk.document_id),
             "chunk_id": str(chunk.id),
             "sequence": chunk.sequence,
+            "tenant": tenant_id,
         }
 
         for key, value in chunk.metadata.items():
@@ -66,11 +73,7 @@ class VectorStore:
 
     # ---------------------------------------------------------
 
-    def insert_chunks(
-        self,
-        chunks,
-        vectors,
-    ):
+    def insert_chunks(self, chunks, vectors, tenant_id):
 
         if len(chunks) != len(vectors):
 
@@ -83,7 +86,7 @@ class VectorStore:
             vectors,
         ):
 
-            payload = self.build_qdrant_payload(chunk)
+            payload = self.build_qdrant_payload(chunk, tenant_id)
 
             points.append(
                 PointStruct(
@@ -112,5 +115,13 @@ class VectorStore:
             with_payload=True,
             with_vectors=False,
             score_threshold=score_threshold,
+            query_filter=Filter(
+                must=[
+                    FieldCondition(
+                        key="tenant",
+                        match=MatchValue(value="finance_dept"),
+                    )
+                ]
+            ),
         )
         return result.points

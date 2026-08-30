@@ -19,6 +19,25 @@ class Settings(BaseSettings):
     OPENAI_MODEL: str = ""
     EMBEDDING_MODEL: str = ""
 
+    # ====================================================
+    # model configuration
+    # ====================================================
+
+    LLM_PROVIDER: str = ""
+    LLM_MODEL: str = ""
+    LLM_API_KEY: str = ""
+    LLM_BASE_URL: str = ""
+
+    #################################
+    # EMBEDDINGS
+    #################################
+
+    EMBEDDING_PROVIDER: str = ""
+
+    EMBEDDING_MODEL: str = ""
+    EMBEDDING_API_KEY: str = ""
+    EMBEDDING_BASE_URL: str = ""
+
     # MongoDB
     MONGO_URI: str = ""
     MONGO_DB: str = "knowledge_db"
@@ -28,10 +47,7 @@ class Settings(BaseSettings):
     QDRANT_API_KEY: str = ""
     COLLECTION_NAME: str = "documents"
 
-    model_config = SettingsConfigDict(
-        env_file=".env",
-        extra="ignore"
-    )
+    model_config = SettingsConfigDict(env_file=".env", extra="ignore")
 
     @property
     def database_url(self) -> str:

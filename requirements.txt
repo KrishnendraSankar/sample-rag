@@ -22,3 +22,7 @@ python-docx
 markdown
 markdown-it-py>=3.0.0
 PyYAML>=6.0
+
+sentence-transformers
+transformers
+huggingface_hub

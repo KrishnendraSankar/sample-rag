@@ -8,7 +8,6 @@ from app.schemas.query import (
     QueryResponse,
 )
 
-
 router = APIRouter(
     prefix="/query",
     tags=["RAG Query"],
@@ -26,10 +25,7 @@ router = APIRouter(
 rag_pipeline = RAGPipeline()
 
 
-@router.post(
-    "",
-    response_model=QueryResponse,
-)
+@router.post("", response_model=QueryResponse)
 def query_rag(
     request: QueryRequest,
 ) -> QueryResponse:
@@ -42,19 +38,14 @@ def query_rag(
         result = rag_pipeline.ask(
             question=request.question,
             top_k=request.top_k,
-            score_threshold= request.score_threshold
-
+            score_threshold=request.score_threshold,
         )
 
-        return QueryResponse(
-            **result
-        )
+        return QueryResponse(**result)
 
     except Exception as exc:
 
-        print(
-            f"RAG query failed: {exc}"
-        )
+        print(f"RAG query failed: {exc}")
 
         raise HTTPException(
             status_code=500,

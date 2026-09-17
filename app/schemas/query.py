@@ -3,6 +3,7 @@
 from pydantic import BaseModel, Field
 from app.models.retrieved_chunk import RetrievedChunk
 
+
 class QueryRequest(BaseModel):
     """
     Request body for the RAG query endpoint.
@@ -12,6 +13,12 @@ class QueryRequest(BaseModel):
         ...,
         min_length=1,
         description="Question to ask the RAG system",
+    )
+
+    tenant_dept: str = Field(
+        ...,
+        min_length=1,
+        description="Tenant to filter the request (hr_dept or finance_dept)",
     )
 
     top_k: int = Field(
@@ -25,7 +32,7 @@ class QueryRequest(BaseModel):
         default=None,
         ge=0.0,
         le=1.0,
-        description="Minimum similarity score required for retrieved chunks"
+        description="Minimum similarity score required for retrieved chunks",
     )
 
 

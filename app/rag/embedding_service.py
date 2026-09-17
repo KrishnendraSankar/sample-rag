@@ -7,6 +7,8 @@ abstracting away the underlying provider implementation.
 
 import logging
 
+from qdrant_client.models import SparseVector
+
 from app.config.settings import settings
 from app.services.huggingface_provider import HuggingfaceProvider
 
@@ -74,3 +76,30 @@ class EmbeddingService:
             A list of floats representing the query embedding.
         """
         return self._client.embed(question)
+
+    # 3. Define a Simple Sparse Encoder (BM25 or Token Frequency)
+    # For production, consider using 'fastembed' or a proper BM25 tokenizer.
+    def compute_sparse_vector(self, chunks: list[str]) -> list[SparseVector]:
+        sparse_vectors = []
+        for text in chunks:
+            tokens = text.lower().split()
+            # Create an index mapping unique words to their frequency counts
+            vocab = {word: i for i, word in enumerate(set(tokens))}
+            indices = []
+            values = []
+            for token, idx in vocab.items():
+                indices.append(idx)
+                values.append(float(tokens.count(token)))
+            sparse_vectors.append(SparseVector(indices=indices, values=values))
+        return sparse_vectors
+
+    def compute_question_sparse_vector(self, text: str) -> SparseVector:
+        tokens = text.lower().split()
+        # Create an index mapping unique words to their frequency counts
+        vocab = {word: i for i, word in enumerate(set(tokens))}
+        indices = []
+        values = []
+        for token, idx in vocab.items():
+            indices.append(idx)
+            values.append(float(tokens.count(token)))
+        return SparseVector(indices=indices, values=values)

@@ -23,19 +23,28 @@ class IndexingPipeline:
         self.mongo = MongoService()
 
     def index_document(self, file_path, tenant_id="hr_dept"):
-
+        # document
         document = self.ingestion.ingest(file_path)
 
+        # chunking
         chunk_strings = self.chunker.split(document.content)
-
         chunks = self.chunk_service.create_chunk(document, chunk_strings)
 
-        vectors = self.embedding.embed_chunks([chunk.text for chunk in chunks])
-
+        # save in mongo db
         self.mongo.save_document(document, chunks)
 
-        self.vector_store.create_collection(len(vectors[0]))
+        # Generating Dense Vectors
+        dense_vectors = self.embedding.embed_chunks([chunk.text for chunk in chunks])
 
-        self.vector_store.insert_chunks(chunks, vectors, tenant_id)
+        # Generating Sparse Vectors
+        sparse_vectors = self.embedding.compute_sparse_vector(
+            [chunk.text for chunk in chunks]
+        )
+
+        self.vector_store.create_collection(len(dense_vectors[0]))
+
+        self.vector_store.insert_chunks(
+            chunks, dense_vectors, sparse_vectors, tenant_id
+        )
 
         return document

@@ -39,6 +39,7 @@ def query_rag(
             question=request.question,
             top_k=request.top_k,
             score_threshold=request.score_threshold,
+            tenant=request.tenant_dept,
         )
 
         return QueryResponse(**result)

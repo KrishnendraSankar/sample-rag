@@ -1,5 +1,5 @@
 from qdrant_client import QdrantClient
-from qdrant_client.models import Distance
+from qdrant_client.models import Distance, Prefetch, SparseVectorParams, SparseVector, FusionQuery, Fusion
 from qdrant_client.models import VectorParams
 from qdrant_client.models import PointStruct
 from qdrant_client.models import Filter
@@ -34,7 +34,10 @@ class VectorStore:
         if settings.COLLECTION_NAME not in existing_collections:
             self.client.create_collection(
                 collection_name=settings.COLLECTION_NAME,
-                vectors_config=VectorParams(size=vector_size, distance=Distance.COSINE),
+                vectors_config={
+                    "dense": VectorParams(size=vector_size, distance=Distance.COSINE)
+                },
+                sparse_vectors_config={"sparse": SparseVectorParams()},
             )
 
         # Create payload index for filtering by tenant
@@ -73,25 +76,25 @@ class VectorStore:
 
     # ---------------------------------------------------------
 
-    def insert_chunks(self, chunks, vectors, tenant_id):
+    def insert_chunks(self, chunks, dense_vectors, sparse_vectors, tenant_id):
 
-        if len(chunks) != len(vectors):
+        if len(chunks) != len(dense_vectors):
 
             raise ValueError("Chunks and vectors count mismatch.")
 
         points = []
 
-        for chunk, vector in zip(
-            chunks,
-            vectors,
-        ):
+        for chunk, dense, sparse in zip(chunks, dense_vectors, sparse_vectors):
 
             payload = self.build_qdrant_payload(chunk, tenant_id)
 
             points.append(
                 PointStruct(
                     id=str(chunk.id),
-                    vector=vector,
+                    vector={
+                        "dense": dense,
+                        "sparse": sparse,
+                    },
                     payload=payload,
                 )
             )
@@ -103,14 +106,22 @@ class VectorStore:
 
     def search(
         self,
-        query_vector: list[float],
+        dense_question_vector: list[float],
+        sparse_question_vector: SparseVector,
+        tenant: str,
         limit: int = 5,
         score_threshold: float | None = None,
     ):
         """Search Similar vectors in Qdrant Collection."""
         result = self.client.query_points(
             collection_name=settings.COLLECTION_NAME,
-            query=query_vector,
+            prefetch=[
+                # Sub-query 1: Dense Semantic Search
+                Prefetch(query=dense_question_vector, using="dense", limit=10),
+                # Sub-query 2: Sparse Keyword Search
+                Prefetch(query=sparse_question_vector, using="sparse", limit=10),
+            ],
+            query=FusionQuery(fusion=Fusion.RRF),
             limit=limit,
             with_payload=True,
             with_vectors=False,
@@ -119,7 +130,7 @@ class VectorStore:
                 must=[
                     FieldCondition(
                         key="tenant",
-                        match=MatchValue(value="finance_dept"),
+                        match=MatchValue(value=tenant),
                     )
                 ]
             ),

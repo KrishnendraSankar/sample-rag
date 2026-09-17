@@ -2,6 +2,6 @@ from app.pipeline.indexing_pipeline import IndexingPipeline
 
 pipeline = IndexingPipeline()
 
-pipeline.index_document("app/uploads/Microsoft_Financial_Report.pdf")
+res = pipeline.index_document("app/uploads/Microsoft_Financial_Report.pdf")
 
-print("Document Indexed Successfully")
+print("Document Indexed Successfully", type(res), res)

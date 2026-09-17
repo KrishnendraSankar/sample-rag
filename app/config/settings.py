@@ -41,6 +41,9 @@ class Settings(BaseSettings):
     # MongoDB
     MONGO_URI: str = ""
     MONGO_DB: str = "knowledge_db"
+    
+    # Reranker
+    RERANKER_MODEL: str = "BAAI/bge-reranker-base"
 
     # Qdrant
     QDRANT_URL: str = ""

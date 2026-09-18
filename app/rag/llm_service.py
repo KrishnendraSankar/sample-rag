@@ -40,7 +40,7 @@ class LLMService:
         self._client = provider_class()
         logger.info("LLMService initialized with provider: %s", provider_name)
 
-    def ask(self, prompt: str) -> str:
+    def ask(self, prompt: str, system_prompt: str = "") -> str:
         """Send a prompt to the LLM and return the generated response.
 
         Args:
@@ -49,4 +49,4 @@ class LLMService:
         Returns:
             The generated text response.
         """
-        return self._client.generate(prompt)
+        return self._client.generate(prompt, system_prompt)

@@ -9,6 +9,7 @@ langchain-openai
 langchain-text-splitters
 langchain-core
 langchain-community
+langchain-cohere
 unstructured
 pymongo
 psycopg

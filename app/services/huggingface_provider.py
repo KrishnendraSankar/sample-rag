@@ -64,7 +64,9 @@ class HuggingfaceProvider(BaseProvider):
     # LLM Generation
     # ------------------------------------------------------------------
 
-    def generate(self, prompt: str, temperature: float = 0.1) -> str:
+    def generate(
+        self, prompt: str, system_prompt: str = "", temperature: float = 0.1
+    ) -> str:
         """Generate a response from the Hugging Face LLM.
 
         Args:
@@ -76,7 +78,10 @@ class HuggingfaceProvider(BaseProvider):
         """
         response = self._llm_client.chat.completions.create(
             model=self._llm_model,
-            messages=[{"role": "user", "content": prompt}],
+            messages=[
+                {"role": "system", "content": system_prompt},
+                {"role": "user", "content": prompt},
+            ],
             temperature=temperature,
         )
         return response.choices[0].message.content or ""
